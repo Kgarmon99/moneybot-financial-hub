@@ -1,16 +1,27 @@
 @import "tailwindcss";
 
+:root {
+  --mb-green: #00E676;
+  --mb-green-dark: #00C853;
+  --mb-green-soft: #69F0AE;
+  --mb-ink: #07111F;
+  --mb-ink-2: #0B1628;
+  --mb-panel: rgba(10, 24, 42, 0.86);
+  --mb-line: rgba(105, 240, 174, 0.22);
+  --mb-white: #F8FAFC;
+  --mb-muted: #AAB8C8;
+  --mb-gold: #FBBF24;
+  --mb-red: #FB7185;
+  --mb-blue: #38BDF8;
+  --mb-radius-sm: 12px;
+  --mb-radius-md: 18px;
+  --mb-radius-lg: 28px;
+}
+
 @layer utilities {
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -22,7 +33,30 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: var(--mb-ink);
+  color: var(--mb-white);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mb-ink-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mb-green);
+  border-radius: 4px;
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.3);
+}
+
+.glow-green-strong {
+  box-shadow: 0 0 40px rgba(0, 230, 118, 0.5);
 }
