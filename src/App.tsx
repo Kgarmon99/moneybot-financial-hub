@@ -1,7 +1,25 @@
 import { useState, useMemo } from 'react';
-import { Search, Plus, Star, ExternalLink, X } from 'lucide-react';
+import { Search, Plus, Star, ExternalLink, X, Filter, BookOpen, Calculator, Wrench, Headphones, GraduationCap } from 'lucide-react';
 import { resources, categoryLabels, levelLabels, allTags } from './data/resources';
 import type { Resource, ResourceCategory, ResourceLevel, ResourceSubmission } from './types/resource';
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  calculator: <Calculator size={20} />,
+  tool: <Wrench size={20} />,
+  resource: <BookOpen size={20} />,
+  podcast: <Headphones size={20} />,
+  book: <BookOpen size={20} />,
+  course: <GraduationCap size={20} />,
+};
+
+const categoryColors: Record<string, string> = {
+  calculator: 'bg-emerald-500',
+  tool: 'bg-blue-500',
+  resource: 'bg-violet-500',
+  podcast: 'bg-orange-500',
+  book: 'bg-pink-500',
+  course: 'bg-cyan-500',
+};
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,7 +29,6 @@ function App() {
   const [showFreeOnly, setShowFreeOnly] = useState(false);
   const [showSubmitForm, setShowSubmitForm] = useState(false);
 
-  // Submission form state
   const [submission, setSubmission] = useState<Partial<ResourceSubmission>>({
     category: 'resource',
     level: 'beginner',
@@ -46,7 +63,6 @@ function App() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Store submission (in a real app, this would go to a backend)
     const newSubmission: ResourceSubmission = {
       ...submission as ResourceSubmission,
       submittedAt: new Date().toISOString(),
@@ -59,22 +75,27 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">💰 MoneyBot Financial Hub</h1>
-              <p className="text-emerald-100">The largest curated database of financial education resources</p>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white text-xl font-bold">
+                💰
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">MoneyBot Financial Hub</h1>
+                <p className="text-sm text-gray-500">Curated financial education resources</p>
+              </div>
             </div>
             <div className="flex gap-3">
-              <span className="bg-white/20 px-4 py-2 rounded-full text-sm">
+              <span className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium">
                 {resources.length}+ Resources
               </span>
               <button
                 onClick={() => setShowSubmitForm(true)}
-                className="bg-white text-emerald-600 px-4 py-2 rounded-full text-sm font-semibold hover:bg-emerald-50 transition flex items-center gap-2"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2"
               >
                 <Plus size={18} />
                 Submit Resource
@@ -86,8 +107,8 @@ function App() {
 
       {/* Featured Section */}
       <section className="max-w-7xl mx-auto px-4 py-8">
-        <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-          <Star className="text-amber-500" size={24} />
+        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <Star className="text-amber-400 fill-amber-400" size={20} />
           Featured Resources
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -98,26 +119,26 @@ function App() {
       </section>
 
       {/* Search & Filters */}
-      <section className="max-w-7xl mx-auto px-4 py-6 border-t border-slate-200">
-        <div className="flex flex-col gap-4">
+      <section className="max-w-7xl mx-auto px-4 py-6">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           {/* Search Bar */}
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <div className="relative mb-4">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Search resources, topics, or tags..."
+              placeholder="Search calculators, tools, books, podcasts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition"
+              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             />
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 mb-4">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value as ResourceCategory | 'all')}
-              className="px-4 py-2 rounded-lg border border-slate-200 focus:border-emerald-500 outline-none"
+              className="px-4 py-2 rounded-lg border border-gray-200 focus:border-emerald-500 outline-none bg-white"
             >
               <option value="all">All Categories</option>
               {Object.entries(categoryLabels).map(([key, label]) => (
@@ -128,7 +149,7 @@ function App() {
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value as ResourceLevel | 'all')}
-              className="px-4 py-2 rounded-lg border border-slate-200 focus:border-emerald-500 outline-none"
+              className="px-4 py-2 rounded-lg border border-gray-200 focus:border-emerald-500 outline-none bg-white"
             >
               <option value="all">All Levels</option>
               {Object.entries(levelLabels).map(([key, label]) => (
@@ -136,14 +157,14 @@ function App() {
               ))}
             </select>
 
-            <label className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+            <label className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50 bg-white">
               <input
                 type="checkbox"
                 checked={showFreeOnly}
                 onChange={(e) => setShowFreeOnly(e.target.checked)}
-                className="rounded text-emerald-600 focus:ring-emerald-500"
+                className="rounded text-emerald-500 focus:ring-emerald-500"
               />
-              <span className="text-sm">Free Only</span>
+              <span className="text-sm text-gray-700">Free Only</span>
             </label>
 
             {(selectedTags.length > 0 || selectedCategory !== 'all' || selectedLevel !== 'all' || showFreeOnly) && (
@@ -154,7 +175,7 @@ function App() {
                   setSelectedLevel('all');
                   setShowFreeOnly(false);
                 }}
-                className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1"
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
               >
                 <X size={16} />
                 Clear filters
@@ -164,15 +185,15 @@ function App() {
 
           {/* Tag Filters */}
           <div className="flex flex-wrap gap-2">
-            <span className="text-sm text-slate-500 py-1">Popular tags:</span>
-            {allTags.slice(0, 20).map(tag => (
+            <span className="text-sm text-gray-500 py-1">Popular:</span>
+            {allTags.slice(0, 15).map(tag => (
               <button
                 key={tag}
                 onClick={() => toggleTag(tag)}
                 className={`px-3 py-1 text-xs rounded-full transition ${
                   selectedTags.includes(tag)
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-emerald-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 {tag}
@@ -182,8 +203,8 @@ function App() {
         </div>
 
         {/* Results Count */}
-        <div className="mt-4 text-sm text-slate-600">
-          Showing {filteredResources.length} of {resources.length} resources
+        <div className="mt-4 text-sm text-gray-600">
+          Showing <span className="font-semibold text-gray-900">{filteredResources.length}</span> of <span className="font-semibold text-gray-900">{resources.length}</span> resources
         </div>
       </section>
 
@@ -197,7 +218,7 @@ function App() {
         
         {filteredResources.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-slate-500 mb-4">No resources found matching your criteria.</p>
+            <p className="text-gray-500 mb-4">No resources found matching your criteria.</p>
             <button
               onClick={() => {
                 setSearchQuery('');
@@ -206,7 +227,7 @@ function App() {
                 setSelectedLevel('all');
                 setShowFreeOnly(false);
               }}
-              className="text-emerald-600 hover:underline"
+              className="text-emerald-600 hover:underline font-medium"
             >
               Clear all filters
             </button>
@@ -217,13 +238,13 @@ function App() {
       {/* Submit Modal */}
       {showSubmitForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Submit a Resource</h2>
+                <h2 className="text-xl font-bold text-gray-900">Submit a Resource</h2>
                 <button
                   onClick={() => setShowSubmitForm(false)}
-                  className="p-2 hover:bg-slate-100 rounded-full"
+                  className="p-2 hover:bg-gray-100 rounded-full"
                 >
                   <X size={20} />
                 </button>
@@ -231,48 +252,48 @@ function App() {
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Title *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                   <input
                     required
                     type="text"
                     value={submission.title || ''}
                     onChange={(e) => setSubmission({...submission, title: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-emerald-500 outline-none"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none"
                     placeholder="e.g., Mint Personal Finance"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Description *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
                   <textarea
                     required
                     value={submission.description || ''}
                     onChange={(e) => setSubmission({...submission, description: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-emerald-500 outline-none"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none"
                     rows={3}
                     placeholder="Brief description of the resource..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">URL *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">URL *</label>
                   <input
                     required
                     type="url"
                     value={submission.url || ''}
                     onChange={(e) => setSubmission({...submission, url: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-emerald-500 outline-none"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none"
                     placeholder="https://..."
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Category *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
                     <select
                       value={submission.category}
                       onChange={(e) => setSubmission({...submission, category: e.target.value as ResourceCategory})}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-emerald-500 outline-none"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-500 outline-none"
                     >
                       {Object.entries(categoryLabels).map(([key, label]) => (
                         <option key={key} value={key}>{label}</option>
@@ -281,11 +302,11 @@ function App() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Level *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Level *</label>
                     <select
                       value={submission.level}
                       onChange={(e) => setSubmission({...submission, level: e.target.value as ResourceLevel})}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-emerald-500 outline-none"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-500 outline-none"
                     >
                       {Object.entries(levelLabels).map(([key, label]) => (
                         <option key={key} value={key}>{label}</option>
@@ -295,12 +316,12 @@ function App() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Author/Creator</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Author/Creator</label>
                   <input
                     type="text"
                     value={submission.author || ''}
                     onChange={(e) => setSubmission({...submission, author: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:border-emerald-500 outline-none"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-500 outline-none"
                     placeholder="e.g., Dave Ramsey"
                   />
                 </div>
@@ -310,14 +331,14 @@ function App() {
                     type="checkbox"
                     checked={submission.free}
                     onChange={(e) => setSubmission({...submission, free: e.target.checked})}
-                    className="rounded text-emerald-600"
+                    className="rounded text-emerald-500"
                   />
-                  <label className="text-sm text-slate-700">This resource is free</label>
+                  <label className="text-sm text-gray-700">This resource is free</label>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition"
+                  className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 transition"
                 >
                   Submit Resource
                 </button>
@@ -328,10 +349,10 @@ function App() {
       )}
 
       {/* Footer */}
-      <footer className="bg-slate-800 text-slate-300 py-8">
+      <footer className="bg-white border-t border-gray-200 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="mb-2">MoneyBot Financial Education Hub</p>
-          <p className="text-sm text-slate-500">Curated resources to help you build wealth and financial freedom</p>
+          <p className="text-gray-900 font-semibold mb-1">MoneyBot Financial Education Hub</p>
+          <p className="text-sm text-gray-500">The largest curated database of financial education resources</p>
         </div>
       </footer>
     </div>
@@ -344,49 +365,54 @@ function ResourceCard({ resource }: { resource: Resource }) {
       href={resource.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white rounded-xl p-5 border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition group"
+      className="block bg-white rounded-xl p-5 border border-gray-100 hover:border-emerald-200 hover:shadow-lg transition group"
     >
       <div className="flex items-start justify-between mb-3">
-        <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-          resource.free ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-        }`}>
-          {resource.free ? 'FREE' : 'PAID'}
-        </span>
-        {resource.featured && (
-          <Star className="text-amber-400 fill-amber-400" size={18} />
-        )}
+        <div className={`${categoryColors[resource.category]} text-white p-2 rounded-lg`}>
+          {categoryIcons[resource.category]}
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+            resource.free ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+          }`}>
+            {resource.free ? 'FREE' : 'PAID'}
+          </span>
+          {resource.featured && (
+            <Star className="text-amber-400 fill-amber-400" size={18} />
+          )}
+        </div>
       </div>
 
-      <h3 className="font-bold text-slate-800 mb-2 group-hover:text-emerald-600 transition">
+      <h3 className="font-bold text-gray-900 mb-2 group-hover:text-emerald-600 transition line-clamp-2">
         {resource.title}
       </h3>
       
-      <p className="text-sm text-slate-600 mb-3 line-clamp-2">
+      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
         {resource.description}
       </p>
 
       {resource.author && (
-        <p className="text-xs text-slate-500 mb-3">by {resource.author}</p>
+        <p className="text-xs text-gray-500 mb-3">by {resource.author}</p>
       )}
 
       <div className="flex flex-wrap gap-1 mb-3">
         {resource.tags.slice(0, 3).map(tag => (
-          <span key={tag} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+          <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
             {tag}
           </span>
         ))}
         {resource.tags.length > 3 && (
-          <span className="text-xs text-slate-400">+{resource.tags.length - 3}</span>
+          <span className="text-xs text-gray-400">+{resource.tags.length - 3}</span>
         )}
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <span>{categoryLabels[resource.category]}</span>
+      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span className="font-medium">{categoryLabels[resource.category]}</span>
           <span>•</span>
           <span>{levelLabels[resource.level]}</span>
         </div>
-        <ExternalLink size={16} className="text-slate-400 group-hover:text-emerald-600" />
+        <ExternalLink size={16} className="text-gray-400 group-hover:text-emerald-500" />
       </div>
     </a>
   );
