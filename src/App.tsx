@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, Plus, Star, ExternalLink, X, Filter, BookOpen, Calculator, Wrench, Headphones, GraduationCap } from 'lucide-react';
+import { Search, Plus, Star, ExternalLink, X, BookOpen, Calculator, Wrench, Headphones, GraduationCap } from 'lucide-react';
 import { resources, categoryLabels, levelLabels, allTags } from './data/resources';
 import type { Resource, ResourceCategory, ResourceLevel, ResourceSubmission } from './types/resource';
 
