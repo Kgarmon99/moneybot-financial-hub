@@ -66,7 +66,7 @@ function App() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2">💰 MoneyBot Financial Hub</h1>
-              <p className="text-emerald-100">The largest curated database of financial education resources — Live on GitHub Pages!</p>
+              <p className="text-emerald-100">The largest curated database of financial education resources</p>
             </div>
             <div className="flex gap-3">
               <span className="bg-white/20 px-4 py-2 rounded-full text-sm">
